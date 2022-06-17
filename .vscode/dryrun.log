@@ -1,5 +1,0 @@
-make --dry-run --keep-going --print-directory
-make: Entering directory '/home/ellian/Projects/Pessoal/coding-interview-prep'
-rm -f *.o *.out
-make: Leaving directory '/home/ellian/Projects/Pessoal/coding-interview-prep'
- 
