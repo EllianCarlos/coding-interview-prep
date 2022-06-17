@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include "../../../easy-imports/bits.cpp"
 
 class Graph
 {

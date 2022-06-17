@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include "../../../easy-imports/bits.cpp"
 #include "../data-structures/UnionFind.hpp"
 
 using namespace std;
