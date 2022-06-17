@@ -4,7 +4,7 @@ class Graph
 {
 public:
   void addEdge(int, int, int);
-  Graph::Graph(int);
+  Graph(int);
   int getMaxGraphSize();
 
 private:
