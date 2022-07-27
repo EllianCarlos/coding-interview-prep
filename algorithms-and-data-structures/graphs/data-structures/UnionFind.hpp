@@ -10,7 +10,7 @@ public:
    *
    * @param size The size of the set
    */
-  UnionFind(int size);
+  explicit UnionFind(int size);
 
   /**
    * @brief Finds the parent of a node in the set.

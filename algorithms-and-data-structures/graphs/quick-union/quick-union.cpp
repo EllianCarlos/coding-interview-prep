@@ -6,6 +6,7 @@ using namespace std;
 class QuickUnionFind : public UnionFind
 {
 public:
+  using UnionFind::UnionFind;
   /**
    * @brief Finds the parent of a node in the set.
    *
@@ -40,7 +41,7 @@ public:
 int main(int argc, char *argv[])
 {
   int numberOfNodes = 9;
-  UnionFind graph(numberOfNodes);
+  QuickUnionFind graph(numberOfNodes);
   graph.unionSet(1, 2);
   graph.unionSet(1, 0);
   graph.unionSet(1, 4);
