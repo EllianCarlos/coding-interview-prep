@@ -89,11 +89,11 @@ int main(int argc, char *argv[])
   graph.unionSet(5, 6);
   graph.unionSet(5, 7);
 
-  // Created Graph:
+  /* Created Graph:
   //    __1__        5
   //   /  |  \      / \ 
   //  2   0   4    6  7
-  //
+  */
 
   assert(graph.find(6) == 5);
   assert(graph.find(7) == 5);
@@ -103,12 +103,10 @@ int main(int argc, char *argv[])
   assert(graph.connected(4, 1) == true);
   assert(graph.connected(1, 5) == false);
 
-  cout << graph.find(0) << endl;
-  cout << graph.getRank(0) << endl;
-
   assert(graph.getRank(0) == 1);
-  assert(graph.getRank(6) == 2);
-  assert(graph.getRank(5) == 1);
+  assert(graph.getRank(6) == 1);
+  assert(graph.getRank(5) == 2);
+  assert(graph.getRank(1) == 2);
 
   graph.unionSet(1, 5);
 
@@ -116,4 +114,9 @@ int main(int argc, char *argv[])
   assert(graph.find(7) == 1);
   assert(graph.find(5) == 1);
   assert(graph.connected(1, 5) == true);
+
+  assert(graph.getRank(0) == 1);
+  assert(graph.getRank(6) == 1);
+  assert(graph.getRank(5) == 2);
+  assert(graph.getRank(1) == 3);
 }
