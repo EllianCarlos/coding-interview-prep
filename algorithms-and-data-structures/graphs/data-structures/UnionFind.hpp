@@ -30,7 +30,7 @@ public:
    */
   bool connected(int x, int y);
 
-private:
+protected:
   /**
    * @brief Variable containing the map from each node to its root. The node is represented by the index
    * and the root is data within that index.
