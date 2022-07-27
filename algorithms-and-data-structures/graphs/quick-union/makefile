@@ -1,5 +1,5 @@
 all:
-	g++ quick-union.cpp ../data-structures/UnionFind.cpp ../data-structures/UnionFind.hpp -o quick-union.o 
+	g++ quick-union.cpp ../data-structures/UnionFind.cpp -o quick-union.o -Wall
 
 run:
 	./quick-union.o

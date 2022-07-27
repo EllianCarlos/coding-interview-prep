@@ -1,5 +1,5 @@
 #include "../../../easy-imports/bits.cpp"
-#include "../data-structures/UnionFind.hpp"
+#include "../data-structures/UnionFind.cpp"
 
 using namespace std;
 
@@ -14,11 +14,11 @@ int main(int argc, char *argv[])
   graph.unionSet(5, 6);
   graph.unionSet(5, 7);
 
-  // Created Graph:
+  /* Created Graph:
   //    __1__        5
   //   /  |  \      / \ 
   //  2   0   4    6  7
-  //
+  */
 
   assert(graph.find(6) == 5);
   assert(graph.find(7) == 5);
