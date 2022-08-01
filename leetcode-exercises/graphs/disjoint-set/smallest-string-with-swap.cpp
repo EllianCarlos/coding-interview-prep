@@ -32,15 +32,15 @@ public:
         {
             if (rank[rootSrc] > rank[rootDest])
             {
-                root[dest] = rootSrc;
+                root[rootDest] = rootSrc;
             }
             else if (rank[rootSrc] < rank[rootDest])
             {
-                root[src] = rootDest;
+                root[rootSrc] = rootDest;
             }
             else
             {
-                root[dest] = rootSrc;
+                root[rootDest] = rootSrc;
                 rank[rootSrc] += 1;
             }
         }
@@ -50,7 +50,7 @@ public:
     {
         return find(src) == find(dest);
     }
-
+    string s;
 private:
     vector<int> root;
     vector<int> rank;
@@ -62,12 +62,25 @@ public:
     string smallestStringWithSwaps(string s, vector<vector<int>> &pairs)
     {
         int n = pairs.size();
-        UnionFind uf(n);
+        int m = s.size();
+        UnionFind uf(m);
         for (int i = 0; i < n; ++i)
         {
             uf.unionSet(pairs[i][0], pairs[i][1]);
         }
-        string answer = "abc";
-        return answer;
+        
+        string newStr;
+        unordered_map<int, priority_queue<char, vector<char>, greater<char>>> mm; 
+        
+        for (int i = 0; i < m; ++i) {
+            mm[uf.find(i)].push(s[i]);
+        }
+        
+        for (int i = 0; i < m; ++i) {
+            newStr += mm[uf.find(i)].top();
+            mm[uf.find(i)].pop();
+        }
+        
+        return newStr;
     }
 };
