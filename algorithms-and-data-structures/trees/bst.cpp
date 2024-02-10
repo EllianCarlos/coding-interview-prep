@@ -59,7 +59,21 @@ public:
 
   BSTTree() { this->root = nullptr; }
 
-  TreeNode *search(const int &key) { return this->root; }
+  TreeNode *search(const int &key) {
+    TreeNode *current = this->root;
+    while (current != NULL) {
+      if (current->getKey() == key)
+        return current;
+
+      if (key > current->getKey()) {
+        current = current->getRightChild();
+      } else {
+        current = current->getLeftChild();
+      }
+    }
+
+    return nullptr;
+  }
 
   void insert(const int &key, const int &value) {
     if (this->root == nullptr) {
@@ -103,7 +117,11 @@ public:
 
   void removed(const int &key) {}
 
-  void update(const int &key) {}
+  void update(const int &key, const int &value) {
+    TreeNode *node = search(key);
+    if (node)
+      node->setValue(value);
+  }
 };
 
 void InorderBST(TreeNode *root) {
@@ -136,14 +154,26 @@ int main() {
   bst->insert(122, 344);
   bst->insert(1, 110);
   bst->insert(8, 0);
+  bst->insert(8, 90);
   bst->insert(150, -33);
 
   cout << "Inorder: " << endl;
   InorderBST(bst->root);
+
   cout << "Preorder: " << endl;
   Preorder(bst->root);
+
   cout << "Postorder: " << endl;
   Postorder(bst->root);
+
+  cout << "Searching for 8" << endl;
+  TreeNode *searchedNode = bst->search(8);
+  cout << searchedNode->getKey() << " " << searchedNode->getValue() << endl;
+
+  bst->update(8, -1);
+  cout << "Searching for 8" << endl;
+  searchedNode = bst->search(8);
+  cout << searchedNode->getKey() << " " << searchedNode->getValue() << endl;
 
   return 0;
 }
