@@ -29,9 +29,42 @@ public:
     this->value = value;
     this->right = nullptr;
     this->left = nullptr;
+    this->parent = parent;
   }
 
+  ~TreeNode() {}
+
+  bool hasRightSubtree() { return this->right != nullptr; }
+
+  bool hasLeftSubtree() { return this->left != nullptr; }
+
+  bool isChild() { return this->parent != nullptr; }
+
+  bool isRightChild() { return isChild() && this->parent->right == this; }
+
+  bool isLeftChild() { return isChild() && !isRightChild(); }
+
   bool isLeaf() { return this->right == nullptr && this->left == nullptr; }
+
+  TreeNode *digLeft() {
+    TreeNode *current = this;
+
+    while (current->hasLeftSubtree()) {
+      current = current->getLeftChild();
+    }
+
+    return current;
+  }
+
+  TreeNode *digRight() {
+    TreeNode *current = this;
+
+    while (current->hasRightSubtree()) {
+      current = current->getRightChild();
+    }
+
+    return current;
+  }
 
   int getKey() { return this->key; }
 
@@ -47,10 +80,15 @@ public:
 
   void setLeftChild(TreeNode *child) { this->left = child; }
 
+  TreeNode *getParent() { return this->parent; }
+
+  void setParent(TreeNode *parent) { this->parent = parent; }
+
 protected:
   int key;
   TreeNode *right;
   TreeNode *left;
+  TreeNode *parent;
 };
 
 class BSTTree {
@@ -84,11 +122,6 @@ public:
     TreeNode *searched = this->root;
 
     while (searched != nullptr) {
-      if (searched == nullptr) {
-        cerr << "Could not find where to update node." << endl;
-        return;
-      }
-
       if (searched->getKey() == key) {
         cerr << "Key already exists in tree, updating instead." << endl;
         searched->setValue(value);
@@ -115,7 +148,96 @@ public:
     }
   }
 
-  void removed(const int &key) {}
+  void recursiveRemove(TreeNode *node, const int &key) {
+    if (node == nullptr)
+      return;
+
+    if (key < node->getKey()) {
+      recursiveRemove(node->getLeftChild(), key);
+    } else if (key > node->getKey()) {
+      recursiveRemove(node->getRightChild(), key);
+    } else {
+      if (node->isLeaf()) {
+        if (node->isRightChild()) {
+          node->getParent()->setRightChild(nullptr);
+        }
+        if (node->isLeftChild()) {
+          node->getParent()->setLeftChild(nullptr);
+        }
+
+        delete node;
+      } else if (node->hasLeftSubtree() && !node->hasRightSubtree()) {
+        // Set the parent node child to be the right subtree
+        if (node == root) {
+          this->root = node->getLeftChild();
+        } else {
+          if (node->isRightChild()) {
+            node->getParent()->setRightChild(node->getLeftChild());
+          }
+          if (node->isLeftChild()) {
+            node->getParent()->setLeftChild(node->getLeftChild());
+          }
+        }
+        node->getLeftChild()->setParent(node->getParent());
+
+        delete node;
+      } else if (!node->hasLeftSubtree() && node->hasRightSubtree()) {
+        // Set the parent node child to be the right subtree
+        if (node == root) {
+          this->root = node->getRightChild();
+        } else {
+          if (node->isRightChild()) {
+            node->getParent()->setRightChild(node->getRightChild());
+          }
+          if (node->isLeftChild()) {
+            node->getParent()->setLeftChild(node->getRightChild());
+          }
+          node->getRightChild()->setParent(node->getParent());
+
+          delete node;
+        }
+      } else {
+        TreeNode *inorderSucessor = node->getRightChild()->digLeft();
+
+        if (node == this->root) {
+          this->root = inorderSucessor;
+        }
+
+        TreeNode *inorderSucessorRightChild = inorderSucessor->getRightChild();
+
+        if (inorderSucessorRightChild) {
+          inorderSucessorRightChild->setParent(node);
+        }
+
+        if (node->getRightChild() != inorderSucessor)
+          node->getRightChild()->setParent(inorderSucessor);
+        node->getLeftChild()->setParent(inorderSucessor);
+
+        if (node->getRightChild() != inorderSucessor)
+          inorderSucessor->setRightChild(node->getRightChild());
+        else
+          inorderSucessor->setRightChild(nullptr);
+        inorderSucessor->setLeftChild(node->getLeftChild());
+
+        TreeNode *inorderParent = inorderSucessor->getParent();
+
+        if (node->isLeftChild()) {
+          node->getParent()->setLeftChild(inorderSucessor);
+        }
+
+        if (node->isRightChild()) {
+          node->getParent()->setRightChild(inorderSucessor);
+        }
+
+        inorderSucessor->setParent(node->getParent());
+        node->setParent(inorderParent);
+        node->setRightChild(inorderSucessorRightChild);
+        node->setLeftChild(nullptr);
+
+        recursiveRemove(node, node->getKey());
+      }
+    }
+  }
 
   void update(const int &key, const int &value) {
     TreeNode *node = search(key);
@@ -174,6 +296,16 @@ int main() {
   cout << "Searching for 8" << endl;
   searchedNode = bst->search(8);
   cout << searchedNode->getKey() << " " << searchedNode->getValue() << endl;
+
+  cout << "Removing 122" << endl;
+  bst->recursiveRemove(bst->root, 122);
+
+  cout << bst->root->getKey() << endl;
+  if (bst->root->getRightChild())
+    cout << bst->root->getRightChild()->getKey() << endl;
+
+  cout << "Inorder: " << endl;
+  InorderBST(bst->root);
 
   return 0;
 }
