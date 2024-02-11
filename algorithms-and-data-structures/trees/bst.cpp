@@ -304,6 +304,21 @@ int main() {
   if (bst->root->getRightChild())
     cout << bst->root->getRightChild()->getKey() << endl;
 
+  bst->insert(122, 104);
+  bst->insert(-63, 0);
+  bst->insert(-64, 0);
+  bst->insert(-65, 0);
+  bst->insert(987, 21);
+  bst->insert(33, 22);
+  cout << "Removing 33" << endl;
+  bst->recursiveRemove(bst->root, 33);
+  cout << "Removing 22" << endl;
+  bst->recursiveRemove(bst->root, 22);
+  cout << "Removing -63" << endl;
+  bst->recursiveRemove(bst->root, -63);
+  cout << "Removing 8" << endl;
+  bst->recursiveRemove(bst->root, 8);
+
   cout << "Inorder: " << endl;
   InorderBST(bst->root);
 
